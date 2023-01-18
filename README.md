@@ -3,9 +3,6 @@
 
 [https://open5gs.org/open5gs/docs/](https://open5gs.org/open5gs/docs/)
 
-## Dependencies
-This repo is version 2.4.10 of open5gs, so you need mongodb < 5.0. [Installation](https://www.hostnextra.com/kb/install-mongodb-4-4-on-ubuntu-20-04/)
-
 ## Build
 
 ### open5gs
