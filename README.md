@@ -1,30 +1,34 @@
-<p align="center"><a href="https://open5gs.org" target="_blank" rel="noopener noreferrer"><img width="100" src="https://open5gs.org/assets/img/open5gs-logo-only.png" alt="Open5GS logo"></a></p>
 
-## Getting Started
+## Documentation
 
-Please follow the [documentation](https://open5gs.org/open5gs/docs/) at [open5gs.org](https://open5gs.org/)!
+[https://open5gs.org/open5gs/docs/](https://open5gs.org/open5gs/docs/)
 
-## Sponsors
+## Dependencies
+This repo is version 2.4.10 of open5gs, so you need mongodb < 5.0. [Installation](https://www.hostnextra.com/kb/install-mongodb-4-4-on-ubuntu-20-04/)
 
-If you find Open5GS useful for work, please consider supporting this Open Source project by [Becoming a sponsor](https://github.com/sponsors/acetcom). To manage the funding transactions transparently, you can donate through [OpenCollective](https://opencollective.com/open5gs).
+## Build
 
-<p align="center">
-  <a target="_blank" href="https://open5gs.org/#sponsors">
-      <img alt="sponsors" src="https://open5gs.org/assets/img/sponsors.svg">
-  </a>
-</p>
+### open5gs
+You can skip the section about "Getting MongoDB" [guide](https://open5gs.org/open5gs/docs/guide/02-building-open5gs-from-sources/)
 
-## Community
+### UERANSIM
+Just run ```make``` in ```/UERANSIM```. If you have an older version of make, you can install a [new one](https://cmake.org/download/) by downloading the ```.sh``` script for your Linux arch.
 
-- Problem with Open5GS can be filed as [issues](https://github.com/open5gs/open5gs/issues) in this repository.
-- Other topics related to this project are happening on the [discussions](https://github.com/open5gs/open5gs/discussions).
-- Voice and text chat are available in Open5GS's [Discord](https://discordapp.com/) workspace. Use [this link](https://discord.gg/GreNkuc) to get started.
+## Run
 
-## Contributing
+### UERANSIM - Populating the DB
+After finishing the guide, you can populate the DB with subscribers using ```populate_db.py```. Use ```-h``` for understanding how it works.
 
-If you're contributing through a pull request to Open5GS project on GitHub, please read the [Contributor License Agreement](https://open5gs.org/open5gs/cla/) in advance.
+### open5gs - Run Core and userplane
+-   first run ```run_core.sh```
+-   then run ```run_uplane.sh```
+-   if restart is needeed, run ```cleanup.sh```
 
+### UERANSIM - RAN
+-   cd ```UERANSIM/build```
+-   run ```./nr-gnb -c ../config/open5gs-gnb-demo.yalm```
+-   run ```sudo python3 animate.py``` for starting the UEs and triggering "realistic" associations and deassociations
 ## License
 
 - Open5GS Open Source files are made available under the terms of the GNU Affero General Public License ([GNU AGPL v3.0](https://www.gnu.org/licenses/agpl-3.0.html)).
-- [Commercial licenses](https://open5gs.org/open5gs/support/) are also available from [NeoPlane](https://neoplane.io/)
+- [Commercial licenses](https://open5gs.org/open5gs/support/) are also available from [NextEPC, Inc.](https://nextepc.com)
