@@ -168,6 +168,28 @@ ogs_pkbuf_t *gmm_build_registration_accept(amf_ue_t *amf_ue)
 
     pkbuf = nas_5gs_security_encode(amf_ue, &message);
 
+    //IEF LOGGING
+    //After successful registration
+    //&registration_accept->tai_list for tai list []uint_8
+    char buf[128], *pos = buf;
+    int i;
+    for (i=0; i < *(&registration_accept->tai_list.length); ++i) {
+        if (i) {
+            pos += sprintf(pos, ", ");
+        }
+        pos += sprintf(pos, "%u", *(&registration_accept->tai_list.buffer[i]));
+    }
+    //amf_ue->pei for pei string
+    ogs_info("IEF --- ASSOCIATION --- SUPI=[%s], 5G-S_GUTI={AMF_ID:[0x%x],M_TMSI:[0x%x]}, SUCI=[%s], nCGI={pLMNID:[%06x], nCI:[0x%llx]}, nCGITime=[%s], tAI={pLMNID:[%06x],tAC:[%d]}, pEI=[%s], fiveGSTAIList=[%s]",
+             amf_ue->supi, ogs_amf_id_hexdump(&amf_ue->next.guti.amf_id), amf_ue->next.guti.m_tmsi, amf_ue->suci,
+             ogs_plmn_id_hexdump(&amf_ue->nr_cgi.plmn_id),
+             (long long)amf_ue->nr_cgi.cell_id,
+             ogs_sbi_gmtime_string(amf_ue->ue_location_timestamp),
+             ogs_plmn_id_hexdump(&amf_ue->nr_tai.plmn_id), amf_ue->nr_tai.tac.v,
+             amf_ue->pei,
+             buf
+    );
+
     return pkbuf;
 }
 
@@ -279,6 +301,15 @@ ogs_pkbuf_t *gmm_build_de_registration_accept(amf_ue_t *amf_ue)
     message.gmm.h.extended_protocol_discriminator =
         OGS_NAS_EXTENDED_PROTOCOL_DISCRIMINATOR_5GMM;
     message.gmm.h.message_type = OGS_NAS_5GS_DEREGISTRATION_ACCEPT_FROM_UE;
+
+    //IEF LOGGING
+    ogs_info("IEF --- DEASSOCIATION --- SUPI=[%s], 5G-S_GUTI={AMF_ID:[0x%x],M_TMSI:[0x%x]}, SUCI=[%s], nCGI={pLMNID:[%06x], nCI:[0x%llx]}, nCGITime=[%s], tAI={pLMNID:[%06x],tAC:[%d]}",
+             amf_ue->supi, ogs_amf_id_hexdump(&amf_ue->current.guti.amf_id), amf_ue->current.guti.m_tmsi, amf_ue->suci,
+             ogs_plmn_id_hexdump(&amf_ue->nr_cgi.plmn_id),
+             (long long)amf_ue->nr_cgi.cell_id,
+             ogs_sbi_gmtime_string(amf_ue->ue_location_timestamp),
+             ogs_plmn_id_hexdump(&amf_ue->nr_tai.plmn_id), amf_ue->nr_tai.tac.v
+    );
 
     return nas_5gs_security_encode(amf_ue, &message);
 }
